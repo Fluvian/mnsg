@@ -1,0 +1,325 @@
+basename: mnsg
+
+options:
+  create_detected_syms: True
+
+  platform: n64
+  compiler: IDO
+
+  header_encoding: word
+  
+  base_path: .
+  build_path: build/jp
+  src_path: src
+  asm_path: asm
+  asset_path: assets
+
+  target_path: baserom.jp.z64
+  cache_path: .splat_cache.jp
+
+  ld_script_path: mnsg.jp.ld
+  linker_symbol_header_path: build/jp/include/ld_addrs.h
+  symbol_addrs_path: symbol_addrs.jp.txt
+  undefined_syms_path: undefined_syms.jp.txt
+  undefined_syms_auto_path: undefined_syms_auto.txt
+  undefined_funcs_auto_path: undefined_funcs_auto.txt
+
+segments:
+  - name: header
+    type: header
+    start: 0x00000000
+    overlay: no
+    subsegments:
+    - [0x00000000, header, header]
+  
+  - name: entry
+    type: code
+    start: 0x00000040
+    vram: 0xA4000040
+    overlay: no
+    subsegments:
+    - [0x00000040, hasm, boot]
+    - [0x00000B70, bin, bootfont]
+
+  - name: boot
+    type: code
+    start: 0x00001000
+    vram: 0x80000400
+    subalign: 16
+    overlay: no
+    subsegments:
+
+    # main
+    - [0x00001000, hasm, entry]
+    - [0x00001050, c, boot/main] # Main Entry Code
+    - [0x000023B0, c, boot/is_debug] # IS64 Debugger Code
+    - [0x000027A0, c, boot/memory] # Compressed Data Loading Code (.rodata: 800801C0)
+    - [0x00002BE0, c, boot/loop] # Game Loop Code (.rodata: 800801C0)
+    - [0x000044F0, c, boot/math] # Common Math Code (.rodata: 80080290)
+    - [0x00004D70, c, boot/print_text] # Debug Printing Code (.rodata: 800802D0)
+    - [0x00005440, c, boot/controller] # Controller Code (.rodata: 80080340)
+    - [0x00005CF0, c, boot/decompress] # Wave Data Decompression Code
+    - [0x000064D0, c, boot/boot_64D0]
+    - [0x00006640, c, boot/attract_demo] # (.rodata: 80080350)
+    - [0x00007BE0, c, boot/scheduler] # Scheduler Code (.rodata: 80080390)
+    - [0x00008420, c, boot/boot_8420] # (.rodata: 800803B0)
+    - [0x00009100, c, boot/boot_9100]
+    - [0x000091A0, c, boot/scene] # Graphics Handling Code (.rodata: 80080470)
+    - [0x0000B130, c, boot/effects]
+    - [0x0000BD20, c, boot/room] # Common Room Code (.rodata: 800804D0)
+    - [0x0000C040, c, boot/events] # Common Item Tracking Code (.rodata: 80080510)
+    - [0x0000C320, c, boot/dialog_render] # Dialog Box Graphics Code (.rodata: 80080550)
+    - [0x0000DD50, c, boot/boot_DD50] # (.rodata: 800805F0)
+    - [0x0000E5B0, c, boot/boot_E5B0]
+    - [0x0000FC00, c, boot/boot_FC00]
+    - [0x00010B40, c, boot/sprite] # Sprite Graphics Code
+    - [0x000140D0, c, boot/overlay] # Compressed Data Handling Code [wave_uty.c] (.rodata: 80080B40)
+    - [0x00015500, c, boot/pic] # PIC Data Decompression Code (.rodata: 80080F90)
+    - [0x00016E70, c, boot/boot_16E70] # (.rodata: 800810D0)
+    - [0x000170E0, c, boot/render] # Common Graphics/Displaying Functions [anime.c] (.rodata: 80081100)
+    - [0x00020180, c, boot/game] # Overworld Code (.rodata: 80081320)
+    - [0x00021000, c, boot/level_select] # Level Select Code (.rodata: 80081470)
+    - [0x00021EA0, c, boot/skybox] # Skybox Code (.rodata: 80081630)
+    - [0x00023AB0, c, boot/save] # Save Data / Memory Pak Code (.rodata: 80081650)
+    - [0x00024A20, c, boot/rippling_background] # Rippling Background Code (.rodata: 80081A00)
+    - [0x00027CA0, c, boot/boot_27CA0]
+    - [0x0002B280, c, boot/boot_2B280]
+    - [0x0002F390, c, boot/boot_2F390]
+    - [0x00030FB0, c, boot/boot_30FB0]
+    - [0x00032BA0, c, boot/boot_32BA0]
+    - [0x000333A0, c, boot/boot_333A0] # [solid_atari.c] (.rodata: 80082040)
+    - [0x00034F80, c, boot/task] # Task System Code
+    - [0x000363C0, c, boot/heap] # Heap Allocation Code              
+    - [0x000370B0, c, boot/screen_transition] # Screen Transition Code
+    - [0x00037870, c, boot/warp] # Warp Code
+    - [0x00037F20, c, boot/boot_37F20]
+    - [0x00038240, c, boot/rumble]
+    - [0x00038620, c, boot/boot_38620]
+    - [0x00038630, c, boot/boot_38630]
+    - [0x0003BC80, c, boot/boot_3BC80]
+    - [0x0003D810, c, boot/dialog_state] # Dialog Box Handling Code
+
+    # libultra
+    - [0x0003FF90, c, ../libultra/os/initialize]
+    - [0x00040220, c, ../libultra/os/createthread]
+    - [0x00040370, c, ../libultra/os/startthread]
+    - [0x000404C0, c, ../libultra/io/pimgr]
+    - [0x00040650, c, ../libultra/os/setthreadpri]
+    - [0x00040730, c, ../libultra/os/createmesgqueue]
+    - [0x00040760, c, ../libultra/io/visetspecial]
+    - [0x00040920, c, ../libultra/os/recvmesg]
+    - [0x00040A60, c, ../libultra/os/sendmesg]
+    - [0x00040BB0, c, ../libultra/io/contreaddata]
+    - [0x00040E10, c, ../libultra/io/visetyscale]
+    - [0x00040E70, hasm, ../libultra/os/writebackdcache]
+    - [0x00040EF0, hasm, ../libultra/os/invaldcache]
+    - [0x00040FA0, hasm, ../libultra/os/invalicache]
+    - [0x00041020, c, ../libultra/io/pidma]
+    - [0x00041130, c, ../libultra/libc/syncprintf]
+    - [0x00041170, c, ../libultra/io/piwrite]
+    - [0x000411B0, c, ../libultra/libc/xprintf]
+    - [0x00041E70, c, ../libultra/io/piread]
+    - [0x00041EB0, hasm, ../libultra/os/maptlb]
+    - [0x00041F70, hasm, ../libultra/os/unmaptlball]
+    - [0x00041FC0, c, ../libultra/io/viblack]
+    - [0x00042030, hasm, ../libultra/gu/sqrtf]
+    - [0x00042040, c, ../libultra/gu/sinf]
+    - [0x00042200, c, ../libultra/gu/cosf]
+    - [0x00042370, c, ../libultra/os/seteventmesg]
+    - [0x000423E0, c, ../libultra/io/controller]
+    - [0x000427A0, hasm, ../libultra/os/getcount] 
+    - [0x00042810, c, ../libultra/os/gettime]
+    - [0x000428A0, c, ../libultra/libc/llcvt]
+    - [0x00042AB0, c, ../libultra/io/vimgr]
+    - [0x00042E10, c, ../libultra/io/visetmode]
+    - [0x00042E80, c, ../libultra/io/visetevent]
+    - [0x00042EF0, hasm, ../libultra/os/setintmask]
+    - [0x00042F90, c, ../libultra/io/sptaskyielded]
+    - [0x00043010, c, ../libultra/io/vigetcurrframebuf]
+    - [0x00043050, c, ../libultra/io/vigetnextframebuf]
+    - [0x00043090, c, ../libultra/io/viswapbuf]
+    - [0x000430E0, hasm, ../libultra/os/writebackdcacheall]
+    - [0x00043110, c, ../libultra/io/sptask]
+    - [0x00043400, c, ../libultra/io/dpsetnextbuf]
+    - [0x000434B0, c, ../libultra/io/sptaskyield]
+    - [0x000434D0, c, ../libultra/gu/frustum]
+    - [0x00043690, c, ../libultra/libc/ll]
+    - [0x00043950, c, ../libultra/gu/perspective]
+    - [0x00043BE0, c, ../libultra/gu/lookathil]
+    - [0x00044410, c, ../libultra/gu/mtxutil]
+    - [0x00044680, c, ../libultra/gu/align]
+    - [0x00044890, c, ../libultra/io/pfsinitpak]
+    - [0x00044B00, c, ../libultra/io/pfsisplug]
+    - [0x00044E70, c, ../libultra/io/pfsallocatefile]
+    - [0x00045620, c, ../libultra/io/pfssearchfile]
+    - [0x000457E0, c, ../libultra/io/pfsfilestate]
+    - [0x00045AD0, c, ../libultra/io/pfsreadwritefile]
+    - [0x00045FD0, c, ../libultra/io/pfsfreeblocks]
+    - [0x00046120, c, ../libultra/io/pfsnumfiles]
+    - [0x00046270, c, ../libultra/io/pfsrepairid]
+    - [0x000464D0, c, ../libultra/io/pfsdeletefile]
+    - [0x00046AE0, c, ../libultra/io/motor]
+    - [0x00047100, c, ../libultra/gu/rotateRPY]
+    - [0x00047320, c, ../libultra/gu/lookat]
+    - [0x00047650, c, ../libultra/gu/lookatref]
+    - [0x00047B10, c, ../libultra/io/contquery]
+    - [0x00047BC0, c, ../libultra/io/pfsinit]
+    - [0x000486A0, c, ../libultra/io/aisetfreq]
+    - [0x00048800, c, ../libultra/audio/sl]
+    - [0x000488C0, c, ../libultra/audio/heapalloc]
+    - [0x00048920, c, ../libultra/os/virtualtophysical]
+    - [0x000489A0, c, ../libultra/io/aisetnextbuf]
+    - [0x00048A50, c, ../libultra/io/aigetlen]
+    - [0x00048A60, c, ../libultra/audio/synthesizer]
+    - [0x00049140, c, ../libultra/audio/heapinit]
+    - [0x00049180, c, ../libultra/audio/bnkf]
+    - [0x000493D0, c, ../libultra/audio/synaddplayer]
+    - [0x00049420, c, ../libultra/audio/synallocvoice]
+    - [0x00049650, c, ../libultra/audio/synstartvoiceparam]
+    - [0x00049740, c, ../libultra/audio/syngetfxref]
+    - [0x000497C0, c, ../libultra/audio/synsetpan]
+    - [0x00049850, c, ../libultra/audio/synsetfxmix]
+    - [0x000498F0, c, ../libultra/audio/synsetvol]
+    - [0x00049990, c, ../libultra/audio/synstopvoice]
+    - [0x00049A10, c, ../libultra/audio/synstartvoice]
+    - [0x00049AA0, c, ../libultra/audio/synsetpitch]
+    - [0x00049B30, c, ../libultra/audio/synsetfxparam]
+    - [0x00049B70, c, ../libultra/libc/sprintf]
+    - [0x00049BF0, hasm, ../libultra/os/setsr]
+    - [0x00049C00, hasm, ../libultra/os/getsr]
+    - [0x00049C10, hasm, ../libultra/os/setfpccsr]
+    - [0x00049C20, c, ../libultra/io/sprawread]
+    - [0x00049C70, c, ../libultra/io/sprawwrite]
+    - [0x00049CC0, hasm, ../libultra/os/exceptasm]
+    - [0x0004A5D0, hasm, ../libultra/os/maptlbrdb]
+    - [0x0004A630, c, ../libultra/io/pirawread]
+    - [0x0004A690, hasm, ../libultra/libc/bzero]
+    - [0x0004A730, hasm, ../libultra/os/interrupt]
+    - [0x0004A770, c, ../libultra/os/thread]
+    - [0x0004A7B0, c, ../libultra/io/cartrominit]
+    - [0x0004A8A0, c, ../libultra/io/leodiskinit]
+    - [0x0004A9A0, c, ../libultra/io/piacs]
+    - [0x0004AA60, c, ../libultra/os/getthreadpri]
+    - [0x0004AA80, c, ../libultra/io/pirawdma]
+    - [0x0004AB60, c, ../libultra/io/epirawdma]
+    - [0x0004AD90, c, ../libultra/io/devmgr]
+    - [0x0004B220, c, ../libultra/io/vi]
+    - [0x0004B360, c, ../libultra/io/siacs]
+    - [0x0004B420, c, ../libultra/io/sirawdma]
+    - [0x0004B4D0, c, ../libultra/os/jammesg]
+    - [0x0004B620, c, ../libultra/io/pigetcmdq]
+    - [0x0004B650, c, ../libultra/io/pirawwrite]
+    - [0x0004B6A0, c, ../libultra/libc/string]
+    - [0x0004B740, c, ../libultra/libc/xlitob]
+    - [0x0004B9E0, c, ../libultra/libc/xldtob]
+    - [0x0004C4A0, c, ../libultra/os/settimer]
+    - [0x0004C580, c, ../libultra/os/timerintr]
+    - [0x0004C980, c, ../libultra/os/getactivequeue]
+    - [0x0004C990, c, ../libultra/io/viswapcontext]
+    - [0x0004CCF0, c, ../libultra/io/spgetstat]
+    - [0x0004CD00, hasm, ../libultra/libc/bcopy]
+    - [0x0004D010, c, ../libultra/io/spsetstat]
+    - [0x0004D020, c, ../libultra/io/spsetpc]
+    - [0x0004D060, c, ../libultra/io/sprawdma]
+    - [0x0004D0F0, c, ../libultra/io/sp]
+    - [0x0004D120, c, ../libultra/io/dp]
+    - [0x0004D150, c, ../libultra/gu/normalize]
+    - [0x0004D1E0, c, ../libultra/io/pfsgetstatus]
+    - [0x0004D2F0, c, ../libultra/io/contpfs]
+    - [0x0004E050, c, ../libultra/io/contramread]
+    - [0x0004E3E0, c, ../libultra/io/pfschecker]
+    - [0x0004EE40, c, ../libultra/io/contramwrite]
+    - [0x0004F1C0, c, ../libultra/io/crc]
+    - [0x0004F340, c, ../libultra/audio/syndelete]
+    - [0x0004F350, hasm, ../libultra/os/probetlb]
+    - [0x0004F410, c, ../libultra/io/ai]
+    - [0x0004F440, c, ../libultra/audio/drvrNew]
+    - [0x0004FBE0, c, ../libultra/audio/synallocfx]
+    - [0x0004FC80, c, ../libultra/audio/mainbus]
+    - [0x0004FDD0, c, ../libultra/audio/load]
+    - [0x00050920, c, ../libultra/audio/resample]
+    - [0x00050C20, c, ../libultra/audio/env]
+    - [0x00051880, c, ../libultra/audio/auxbus]
+    - [0x00051990, c, ../libultra/audio/save]
+    - [0x00051A50, c, ../libultra/io/si]
+    - [0x00051A80, c, ../libultra/io/leointerrupt]
+    - [0x00052300, c, ../libultra/os/destroythread]
+    - [0x00052400, c, ../libultra/os/resetglobalintmask]
+    - [0x00052460, c, ../libultra/io/epirawwrite]
+    - [0x000524B0, c, ../libultra/io/epirawread]
+    - [0x00052500, c, ../libultra/os/setglobalintmask]
+    - [0x00052550, c, ../libultra/os/yieldthread]
+    - [0x000525A0, c, ../libultra/libc/ldiv]
+    - [0x00052730, hasm, ../libultra/os/setcompare]
+    - [0x00052740, c, ../libultra/audio/filter]
+    - [0x00052760, c, ../libultra/audio/reverb]
+    - [0x000533B0, c, ../libultra/audio/copy]
+    - [0x00053430, bin, rspboot_text]
+    - [0x00053500, bin, f3dex_text]
+    - [0x00054930, bin, aspMain_text]
+    
+    # main .data section
+    - [0x00055750, data, boot/main]
+    - [0x00055790, data, boot/memory]
+    - [0x000596E0, data, boot/loop]
+    - [0x000597D0, data, boot/math]
+    - [0x0005C0C0, data, boot/print_text]
+    - [0x0005C260, data, boot/scheduler]
+    - [0x0005C270, data, boot/boot_8420]
+    - [0x0005C560, data, boot/scene]
+    - [0x0005C890, data, boot/room]
+    - [0x0005C990, data, boot/dialog_render]
+    - [0x0006A050, data, boot/sprite]
+    - [0x0006A070, data, boot/overlay]
+    - [0x000714C0, data, boot/boot_16E70]
+    - [0x00071CD0, data, boot/render]
+    - [0x00071E10, data, boot/game]
+    - [0x00071E60, data, boot/level_select]
+    - [0x000737D0, data, boot/skybox]
+    - [0x00073850, data, boot/save]
+    - [0x00073860, data, boot/rippling_background]
+    - [0x000739F0, data, boot/boot_333A0]
+    - [0x00073A00, data, boot/task]
+    - [0x00073A30, data, boot/heap]
+    - [0x00073AC0, data, boot/screen_transition]
+    - [0x00073AF0, data, boot/warp]
+    - [0x00073BC0, data, boot/data_73BC0]
+    - [0x00074910, data, boot/boot_38630]
+    - [0x00074E00, data, boot/boot_3BC80]
+    - [0x0007C820, data, boot/dialog_state]
+
+    # libultra .data section
+    - [0x0007FA60, bin, libultra_data]
+
+    # main & libultra .rodata section
+    - [0x00080D40, bin, boot_rodata]
+    - [0x000834E0, bin, libultra_rodata]
+
+    - [0x00083950, bin, f3dex_data]
+    - [0x00084150, bin, aspMain_data]
+
+  - name: sound
+    type: bin
+    start: 0x00084410
+    subsegments:
+    - [0x00084410, bin, instruments.jp.ctl]
+    - [0x0008C300, bin, sfx.jp.ctl]
+    - [0x00090BF0, bin, speech.jp.ctl]
+    - [0x0009C660, bin, bank_3.jp.ctl]
+    - [0x0009C770, bin, bank_4.jp.ctl]
+    - [0x0009C880, bin, bank_5.jp.ctl]
+    - [0x0009C990, bin, bank_6.jp.ctl]
+    - [0x0009CAA0, bin, bank_7.jp.ctl]
+    
+    - [0x0009CBB0, bin, instruments.jp.tbl]
+    - [0x001B0C50, bin, sfx.jp.tbl]
+    - [0x00258FD0, bin, speech.jp.tbl]
+    - [0x00555B20, bin, bank_3.jp.tbl]
+    - [0x005560C0, bin, bank_4.jp.tbl]
+    - [0x00556660, bin, bank_5.jp.tbl]
+    - [0x00556C00, bin, bank_6.jp.tbl]
+    - [0x005571A0, bin, bank_7.jp.tbl]
+
+  - [0x0057C5F0, bin, compressed]
+
+  - [0x2000000]
