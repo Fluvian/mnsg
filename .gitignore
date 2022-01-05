@@ -1,7 +1,6 @@
 # Directories
-asm/
-assets/
-bin/
+asm/*
+assets/*
 build/
 expected/
 __pycache__/
@@ -13,3 +12,8 @@ __pycache__/
 *auto.txt
 .splat_cache
 ctx.c
+
+# Exceptions
+!asm/boot.s
+!asm/entry.s
+!asm/header.s
