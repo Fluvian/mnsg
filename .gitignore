@@ -1,0 +1,15 @@
+# Directories
+asm/
+assets/
+bin/
+build/
+expected/
+__pycache__/
+
+# Files
+*.bin
+*.z64
+*.ld
+*auto.txt
+.splat_cache
+ctx.c
