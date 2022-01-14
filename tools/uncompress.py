@@ -239,7 +239,7 @@ def write_raw_files(input, buffer, tableAddr):
         # Write the new locations to the overlay table.
         buffer[tableAddr + (i * 4):tableAddr + (i * 4) + 4] = newFileAddrs[i].to_bytes(4, 'big')
 
-# Find the nearest power of two for the final ROM size.
+# Find the nearest power of two for the final ROM size. (https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2)
 def get_new_file_size(size):
     size -= 1
     size |= size >> 1
