@@ -1,4 +1,5 @@
 # Directories
+.vscode/
 asm/*
 assets/*
 build/
