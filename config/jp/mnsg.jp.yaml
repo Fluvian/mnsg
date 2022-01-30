@@ -8,7 +8,7 @@ options:
 
   header_encoding: word
   
-  base_path: .
+  base_path: ./../../
   build_path: build/jp
   src_path: src
   asm_path: asm
@@ -53,7 +53,7 @@ segments:
     - [0x00001000, hasm, entry]
     - [0x00001050, c, boot/main] # Main Entry Code
     - [0x000023B0, c, boot/is_debug] # IS64 Debugger Code
-    - [0x000027A0, c, boot/memory] # Compressed Data Loading Code (.rodata: 800801C0)
+    - [0x000027A0, c, boot/memory] # Compressed Data Loading Code (.rodata: 80080180)
     - [0x00002BE0, c, boot/loop] # Game Loop Code (.rodata: 800801C0)
     - [0x000044F0, c, boot/math] # Common Math Code (.rodata: 80080290)
     - [0x00004D70, c, boot/print_text] # Debug Printing Code (.rodata: 800802D0)
@@ -61,7 +61,8 @@ segments:
     - [0x00005CF0, c, boot/decompress] # Wave Data Decompression Code
     - [0x000064D0, c, boot/boot_64D0]
     - [0x00006640, c, boot/attract_demo] # (.rodata: 80080350)
-    - [0x00007BE0, c, boot/scheduler] # Scheduler Code (.rodata: 80080390)
+    - [0x00006E00, c, boot/boot_6E00]
+    - [0x000078A0, c, boot/scheduler] # Scheduler Code (.rodata: 80080390)
     - [0x00008420, c, boot/boot_8420] # (.rodata: 800803B0)
     - [0x00009100, c, boot/boot_9100]
     - [0x000091A0, c, boot/scene] # Graphics Handling Code (.rodata: 80080470)
@@ -261,7 +262,7 @@ segments:
     # main .data section
     - [0x00055750, data, boot/main]
     - [0x00055790, data, boot/memory]
-    - [0x000596E0, data, boot/loop]
+    - [0x000596E0, .data, boot/loop]
     - [0x000597D0, data, boot/math]
     - [0x0005C0C0, data, boot/print_text]
     - [0x0005C260, data, boot/scheduler]
@@ -292,7 +293,10 @@ segments:
     - [0x0007FA60, bin, libultra_data]
 
     # main & libultra .rodata section
-    - [0x00080D40, bin, boot_rodata]
+    - [0x00080D40, rodata, boot/main]
+    - [0x00080D80, rodata, boot/memory]
+    - [0x00080DC0, rodata, boot/loop]
+    - [0x00080E90, bin, boot_rodata]
     - [0x000834E0, bin, libultra_rodata]
 
     - [0x00083950, bin, f3dex_data]
