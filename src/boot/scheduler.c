@@ -1,6 +1,18 @@
 #include "common.h"
 
-#pragma GLOBAL_ASM("asm/nonmatchings/boot/scheduler/func_80006FE0.s")
+#pragma GLOBAL_ASM("asm/nonmatchings/boot/scheduler/func_80006CA0.s")
+
+#pragma GLOBAL_ASM("asm/nonmatchings/boot/scheduler/func_80006DEC.s")
+
+#pragma GLOBAL_ASM("asm/nonmatchings/boot/scheduler/func_80006E3C.s")
+
+#pragma GLOBAL_ASM("asm/nonmatchings/boot/scheduler/func_80006EC4.s")
+
+#pragma GLOBAL_ASM("asm/nonmatchings/boot/scheduler/func_80006ECC.s")
+
+#pragma GLOBAL_ASM("asm/nonmatchings/boot/scheduler/func_80006ED4.s")
+
+#pragma GLOBAL_ASM("asm/nonmatchings/boot/scheduler/func_80006EDC.s")
 
 #pragma GLOBAL_ASM("asm/nonmatchings/boot/scheduler/func_80007010.s")
 
