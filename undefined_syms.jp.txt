@@ -1,0 +1,4 @@
+/* main.c: 0x80000450 */
+gThread1Stack = 0x800879C0;
+gThread3Stack = 0x80089B70;
+gThread4Stack = 0x8008DD20;

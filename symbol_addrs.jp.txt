@@ -1,0 +1,30 @@
+// libultra
+osInitialize = 0x8003F390; // type:func rom:0x3FF90
+osCreateThread = 0x8003F620; // type:func rom:0x40220
+osStartThread = 0x8003F770; // type:func rom:0x40370
+osCreatePiManager = 0x8003F8C0; // type:func rom:0x404C0
+osSetThreadPri = 0x8003FA50; // type:func rom:0x40650
+osWritebackDCache = 0x80040270; // type:func rom:0x40E70
+osPiWriteIo = 0x80040570; // type:func rom:0x41170
+_Printf = 0x80040C20; // type:func rom:0x41820
+osSyncPrintf = 0x80040530; // type:func rom:0x41130
+rmonPrintf = 0x8004054C; // type:func rom:0x4114C
+osPiReadIo = 0x80041270; // type:func rom:0x41E70
+
+// main.c: 0x80000450
+gBootThreadStack = 0x80083810; // type:data
+gThread1 = 0x80085810; // type:data
+gThread3 = 0x800899C0; // type:data
+gThread4 = 0x8008DB70; // type:data
+gPIMesgQueue = 0x8008FD20; // type:data
+gPIMesgBuf = 0x8008FD38; // type:data
+gGfxMesgBuf = 0x80090090; // type:data
+gDmaMesgQueue = 0x80090058; // type:data
+gDmaMesgBuf = 0x80090070; // type:data
+gGfxMesgQueue = 0x80090078; // type:data
+gGfxMesgBuf = 0x80090090; // type:data
+gGameMesgQueue = 0x800900B0; // type:data
+gGameMesgBuf = 0x800900C8; // type:data
+gSPTaskMesgs = 0x800900D0; // type:data
+gSPTasks = 0x80090110; // type:data
+gScheduler = 0x800901E0; // type:data
