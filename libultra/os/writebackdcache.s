@@ -7,7 +7,7 @@
 
 .section .text, "ax"
 
-glabel func_80040270
+glabel osWritebackDCache
 /* 40E70 80040270 18A00011 */  blez       $a1, .L800402B8
 /* 40E74 80040274 00000000 */   nop
 /* 40E78 80040278 240B2000 */  addiu      $t3, $zero, 0x2000
