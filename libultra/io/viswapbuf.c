@@ -1,3 +1,3 @@
 #include "common.h"
 
-#pragma GLOBAL_ASM("asm/libultra/io/viswapbuf/func_80042490.s")
+#pragma GLOBAL_ASM("asm/libultra/io/viswapbuf/osViSwapBuffer.s")

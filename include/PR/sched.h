@@ -56,11 +56,9 @@ typedef struct OSScTask_s {
     OSTask              list;
     OSMesgQueue         *msgQ;
     OSMesg              msg;
-#ifndef _FINALROM                       /* all #ifdef items should    */
-    OSTime              startTime;      /* remain at the end!!, or    */
-    OSTime              totalTime;      /* possible conflict if       */
-#endif                                  /* FINALROM library used with */
-} OSScTask;                             /* non FINALROM code          */
+    OSTime              startTime;
+    OSTime              totalTime;
+} OSScTask;
 
 /*
  * OSScTask flags:
@@ -93,6 +91,8 @@ typedef struct {
     OSMesg      intBuf[OS_SC_MAX_MESGS];
     OSMesgQueue cmdQ;
     OSMesg      cmdMsgBuf[OS_SC_MAX_MESGS];
+    OSMesgQueue myQ;
+    OSMesg      myMsgBuf[OS_SC_MAX_MESGS];
     OSThread    thread;
     OSScClient  *clientList;
     OSScTask    *audioListHead;
@@ -110,6 +110,8 @@ void            osCreateScheduler(OSSched *s, void *stack, OSPri priority,
 void            osScAddClient(OSSched *s, OSScClient *c, OSMesgQueue *msgQ);
 void            osScRemoveClient(OSSched *s, OSScClient *c);
 OSMesgQueue     *osScGetCmdQ(OSSched *s);
+OSMesgQueue     *osScGetMyQ(OSSched *s);
+OSMesgQueue     *osScGetInterruptQ(OSSched *s);
 
 #endif
 

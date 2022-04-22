@@ -4,14 +4,36 @@ osCreateThread = 0x8003F620; // type:func rom:0x40220
 osStartThread = 0x8003F770; // type:func rom:0x40370
 osCreatePiManager = 0x8003F8C0; // type:func rom:0x404C0
 osSetThreadPri = 0x8003FA50; // type:func rom:0x40650
+osCreateMesgQueue = 0x8003FB30; // type:func rom:0x40730
+osViSetSpecialFeatures = 0x8003FB60; // type:func rom:0x40760
+osRecvMesg = 0x8003FD20; // type:func rom:0x40920
+osSendMesg = 0x8003FE60; // type:func rom:0x40A60
 osWritebackDCache = 0x80040270; // type:func rom:0x40E70
 osPiWriteIo = 0x80040570; // type:func rom:0x41170
 _Printf = 0x80040C20; // type:func rom:0x41820
 osSyncPrintf = 0x80040530; // type:func rom:0x41130
 rmonPrintf = 0x8004054C; // type:func rom:0x4114C
 osPiReadIo = 0x80041270; // type:func rom:0x41E70
+osViBlack = 0x800413C0; // type:func rom:0x41FC0
+osSetEventMesg = 0x80041770; // type:func rom:0x42370
+osGetTime = 0x80041C10; // type:func rom:0x42810
+osCreateViManager = 0x80041EB0; // type:func rom:0x42AB0
+osViSetMode = 0x80042210; // type:func rom:0x42E10
+osViSetEvent = 0x80042280; // type:func rom:0x42E80
+osSetIntMask = 0x800422F0; // type:func rom:0x42EF0
+osSpTaskYielded = 0x80042390; // type:func rom:0x42F90
+osViGetCurrentFramebuffer = 0x80042410; // type:func rom:0x43010
+osViGetNextFramebuffer = 0x80042450; // type:func rom:0x43050
+osViSwapBuffer = 0x80042490; // type:func rom:0x43090
+osWritebackDCacheAll = 0x800424E0; // type:func rom:0x430E0
+osSpTaskLoad = 0x8004262C; // type:func rom:0x4322C
+osSpTaskStartGo = 0x800427BC; // type:func rom:0x433BC
+osDpSetNextBuffer = 0x80042800; // type:func rom:0x43400
+osSpTaskYield = 0x800428B0; // type:func rom:0x434B0
 
-// main.c: 0x80000450
+osViModeTable = 0x8007EF30; // type:data rom:0x7FB30
+
+// main.c
 gBootThreadStack = 0x80083810; // type:data
 gThread1 = 0x80085810; // type:data
 gThread3 = 0x800899C0; // type:data
@@ -28,3 +50,7 @@ gGameMesgBuf = 0x800900C8; // type:data
 gSPTaskMesgs = 0x800900D0; // type:data
 gSPTasks = 0x80090110; // type:data
 gScheduler = 0x800901E0; // type:data
+
+// scheduler.c
+gSchedulerCurrTask = 0x8016D044; // type:data
+gSchedulerNotGfxTask = 0x8016D048; // type:data

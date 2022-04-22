@@ -2,6 +2,7 @@ basename: mnsg
 
 options:
   create_detected_syms: True
+  find_file_boundaries: True
 
   platform: n64
   compiler: IDO
@@ -262,10 +263,10 @@ segments:
     # main .data section
     - [0x00055750, data, boot/main]
     - [0x00055790, data, boot/memory]
-    - [0x000596E0, .data, boot/loop]
+    - [0x000596E0, data, boot/loop]
     - [0x000597D0, data, boot/math]
     - [0x0005C0C0, data, boot/print_text]
-    - [0x0005C260, data, boot/scheduler]
+    - [0x0005C260, .data, boot/scheduler]
     - [0x0005C270, data, boot/boot_8420]
     - [0x0005C560, data, boot/scene]
     - [0x0005C890, data, boot/room]
@@ -296,12 +297,14 @@ segments:
     - [0x00080D40, rodata, boot/main]
     - [0x00080D80, rodata, boot/memory]
     - [0x00080DC0, rodata, boot/loop]
-    - [0x00080E90, bin, boot_rodata]
+    - [0x00080E90, bin, boot_rodata_1]
+    - [0x00080F90, rodata, boot/scheduler]
+    - [0x00080FB0, bin, boot_rodata_2]
     - [0x000834E0, bin, libultra_rodata]
 
     - [0x00083950, bin, f3dex_data]
     - [0x00084150, bin, aspMain_data]
-
+    
   - name: sound
     type: bin
     start: 0x00084410
@@ -324,6 +327,35 @@ segments:
     - [0x00556C00, bin, bank_6.jp.tbl]
     - [0x005571A0, bin, bank_7.jp.tbl]
 
-  - [0x0057C5F0, bin, compressed]
+  - [0x0057C5F0, bin, data_1]
+
+  - name: overlay1
+    type: code
+    start: 0x0058CB60
+    vram: 0x801D0B90
+    subalign: 16
+    overlay: yes
+    subsegments:
+    - [0x0058CB60, c, overlay1/entry]
+    - [0x0058D340, c, overlay1/58D340]
+    - [0x0058DB90, c, overlay1/58DB90]
+    - [0x00595EB0, c, overlay1/595EB0] 
+    - [0x00596AA0, c, overlay1/596AA0]
+    - [0x00599AF0, c, overlay1/599AF0]
+    - [0x0059AF60, c, overlay1/59AF60]
+    - [0x0059DA50, c, overlay1/59DA50]
+    - [0x0059EA60, c, overlay1/59EA60]
+    - [0x0059EC10, c, overlay1/59EC10]
+    - [0x005A27C0, c, overlay1/5A27C0]
+    - [0x005A65E0, c, overlay1/5A65E0]
+    - [0x005A98B0, c, overlay1/5A98B0]
+    - [0x005AF790, c, overlay1/5AF790]
+    - [0x005B33D0, c, overlay1/5B33D0]
+    - [0x005B3CB0, c, overlay1/5B3CB0]
+    - [0x005B4B10, c, overlay1/5B4B10]
+    - [0x005BD4D0, data, overlay1/overlay1]
+    - [0x005CB580, rodata, overlay1/overlay1]
+
+  - [0x005CD620, bin, data_2]
 
   - [0x2000000]

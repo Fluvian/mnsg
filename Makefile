@@ -25,7 +25,7 @@ OBJCOPY := $(CROSS)objcopy
 OBJDUMP := $(CROSS)objdump
 
 CHECK_WARNINGS := -Wall -Wextra -Wno-format-security -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-variable -Wno-missing-braces -Wno-int-conversion
-CC_CHECK := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D_LANGUAGE_C -D_FINALROM -DF3DEX_GBI $(CHECK_WARNINGS)
+CC_CHECK := gcc -fno-builtin -fsyntax-only -fsigned-char -std=gnu90 -D_LANGUAGE_C -D_FINALROM -DF3DEX_GBI -D__sgi -DNDEBUG $(CHECK_WARNINGS)
 
 ##### Flags #####
 INCLUDES := -Iinclude -Iinclude/PR -Iinclude/libc -Isrc -I.
@@ -34,7 +34,7 @@ MIPSISA  := -mips2
 OPTFLAGS := -O2
 
 ASFLAGS := -EB -mtune=vr4300 -march=vr4300 -mabi=32 -Iinclude -I.
-CFLAGS  := -G 0 -non_shared -Xfullwarn -Xcpluscomm $(INCLUDES) -Wab,-r4300_mul -woff 649,838,712 -D_LANGUAGE_C -D_FINALROM -DF3DEX_GBI -D__sgi
+CFLAGS  := -G 0 -non_shared -Xfullwarn -Xcpluscomm $(INCLUDES) -Wab,-r4300_mul -woff 649,838,712 -D_LANGUAGE_C -D_FINALROM -DF3DEX_GBI -D__sgi -DNDEBUG
 OBJCOPYFLAGS := --pad-to=0x2000000 --gap-fill=0x00
 
 ##### Files #####
@@ -86,7 +86,9 @@ baserom.$(VERSION).z64:
 	tools/n64crc baserom.$(VERSION).z64
 
 ##### Recipes #####
+ifndef PERMUTER
 $(GLOBAL_ASM_O_FILES): CC := $(PYTHON) tools/asm-processor/build.py $(CC) -- $(AS) $(ASFLAGS) --
+endif
 
 $(BUILD_DIR)/%.c.o: %.c
 	@mkdir -p $$(dirname $@)
