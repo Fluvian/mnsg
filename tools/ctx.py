@@ -26,7 +26,7 @@ def get_c_file(directory):
 def import_c_file(in_file):
     in_file = os.path.relpath(in_file, root_dir)
     cpp_command = ["gcc", "-E", "-P",
-        "-Iinclude", "-Iinclude/2.0I", "-Iinclude/2.0I/PR", "-Isrc", "-D_LANGUAGE_C", "-DF3DEX_GBI", "-D_FINALROM", in_file]
+        "-Iinclude", "-Iinclude", "-Iinclude/PR", "-Isrc", "-D_LANGUAGE_C", "-DF3DEX_GBI", "-D_FINALROM", "-D__sgi", "-DNDEBUG", in_file]
     try:
         return subprocess.check_output(cpp_command, cwd=root_dir, encoding="utf-8")
     except subprocess.CalledProcessError:
