@@ -1,6 +1,5 @@
 # Directories
 .vscode/
-asm/*
 assets/*
 build/
 expected/
@@ -12,7 +11,7 @@ __pycache__/
 *.ld
 *auto.txt
 .splat_cache
-ctx.c
+ctx.c*
 
 # Exceptions
 !asm/boot.s

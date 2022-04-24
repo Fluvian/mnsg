@@ -1,0 +1,13 @@
+glabel func_801ECF40_5A8F10
+/* 5A8F10 801ECF40 908300CC */  lbu        $v1, 0xcc($a0)
+/* 5A8F14 801ECF44 2862001D */  slti       $v0, $v1, 0x1d
+/* 5A8F18 801ECF48 14400003 */  bnez       $v0, .L801ECF58
+/* 5A8F1C 801ECF4C 28620028 */   slti      $v0, $v1, 0x28
+/* 5A8F20 801ECF50 14400003 */  bnez       $v0, .L801ECF60
+/* 5A8F24 801ECF54 00000000 */   nop
+.L801ECF58:
+/* 5A8F28 801ECF58 386200B8 */  xori       $v0, $v1, 0xb8
+/* 5A8F2C 801ECF5C 2C420001 */  sltiu      $v0, $v0, 1
+.L801ECF60:
+/* 5A8F30 801ECF60 03E00008 */  jr         $ra
+/* 5A8F34 801ECF64 00000000 */   nop

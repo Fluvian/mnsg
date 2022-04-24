@@ -1,0 +1,12 @@
+.include "macro.inc"
+
+.section .data
+
+glabel D_80072E00
+.word 0x00000000
+
+glabel D_80072E04
+.short 0x0081, 0x0000
+
+glabel D_80072E08
+.word D_8016E790, 0x801731A0, D_8016E790, 0x00000000, 0x00000000, D_8016E790, 0x801731A0, D_8016E790, 0x00000000, 0x00000000

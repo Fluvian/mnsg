@@ -34,7 +34,6 @@ osSpTaskYield = 0x800428B0; // type:func rom:0x434B0
 osViModeTable = 0x8007EF30; // type:data rom:0x7FB30
 
 // main.c
-gBootThreadStack = 0x80083810; // type:data
 gThread1 = 0x80085810; // type:data
 gThread3 = 0x800899C0; // type:data
 gThread4 = 0x8008DB70; // type:data
@@ -50,7 +49,22 @@ gGameMesgBuf = 0x800900C8; // type:data
 gSPTaskMesgs = 0x800900D0; // type:data
 gSPTasks = 0x80090110; // type:data
 gScheduler = 0x800901E0; // type:data
+gGameHeap = 0x800924B0; // type:data
+gGameHeapPtr = 0x80161DB8; // type:data
+gDisplayListHead = 0x80161DBC: // type:data
+gDmaActive = 0x80161DC4; // type:data
+gCurrPlayerId = 0x80161DCC; // type:data
+gStartingRoomNum = 0x80161FFC; // type:data
 
 // scheduler.c
 gSchedulerCurrTask = 0x8016D044; // type:data
 gSchedulerNotGfxTask = 0x8016D048; // type:data
+
+// level_select.c
+gDebugStartingData = 0x80071260; // type:data
+gSelectedPlayerId = 0x80072A98; // type:data
+gSelectedWorldType = 0x80072A9C; // type:data
+gUnk80072AA0 = 0x80072AA0; // type:data
+gUnk80072AA4 = 0x80072AA4; // type:data
+gLevelSelectLoopFuncs = 0x80072AA8; // type:data
+gLevelSelectPlayerStrings = 0x80072AC0; // type:data

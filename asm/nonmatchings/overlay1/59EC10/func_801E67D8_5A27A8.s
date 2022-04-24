@@ -1,0 +1,7 @@
+glabel func_801E67D8_5A27A8
+/* 5A27A8 801E67D8 AFA40000 */  sw         $a0, ($sp)
+/* 5A27AC 801E67DC 03E00008 */  jr         $ra
+/* 5A27B0 801E67E0 AFA50004 */   sw        $a1, 4($sp)
+/* 5A27B4 801E67E4 00000000 */  nop
+/* 5A27B8 801E67E8 00000000 */  nop
+/* 5A27BC 801E67EC 00000000 */  nop

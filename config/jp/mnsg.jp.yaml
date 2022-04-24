@@ -261,9 +261,10 @@ segments:
     - [0x00054930, bin, aspMain_text]
     
     # main .data section
-    - [0x00055750, data, boot/main]
+    - [0x00055750, .data, boot/main]
+    - [0x00055780, data, boot/is_debug]
     - [0x00055790, data, boot/memory]
-    - [0x000596E0, data, boot/loop]
+    - [0x000596E0, .data, boot/loop]
     - [0x000597D0, data, boot/math]
     - [0x0005C0C0, data, boot/print_text]
     - [0x0005C260, .data, boot/scheduler]
@@ -296,10 +297,12 @@ segments:
     # main & libultra .rodata section
     - [0x00080D40, rodata, boot/main]
     - [0x00080D80, rodata, boot/memory]
-    - [0x00080DC0, rodata, boot/loop]
+    - [0x00080DC0, .rodata, boot/loop]
     - [0x00080E90, bin, boot_rodata_1]
     - [0x00080F90, rodata, boot/scheduler]
     - [0x00080FB0, bin, boot_rodata_2]
+    - [0x00082070, rodata, boot/level_select]
+    - [0x00082230, bin, boot_rodata_3]
     - [0x000834E0, bin, libultra_rodata]
 
     - [0x00083950, bin, f3dex_data]

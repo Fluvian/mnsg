@@ -1,0 +1,13 @@
+glabel func_801FDDE4_5B9DB4
+/* 5B9DB4 801FDDE4 27BDFFE8 */  addiu      $sp, $sp, -0x18
+/* 5B9DB8 801FDDE8 AFBF0014 */  sw         $ra, 0x14($sp)
+/* 5B9DBC 801FDDEC 0C002C99 */  jal        func_8000B264
+/* 5B9DC0 801FDDF0 00000000 */   nop
+/* 5B9DC4 801FDDF4 0C07F785 */  jal        func_801FDE14_5B9DE4
+/* 5B9DC8 801FDDF8 00000000 */   nop
+/* 5B9DCC 801FDDFC 0C07FDB0 */  jal        func_801FF6C0_5BB690
+/* 5B9DD0 801FDE00 00000000 */   nop
+/* 5B9DD4 801FDE04 8FBF0014 */  lw         $ra, 0x14($sp)
+/* 5B9DD8 801FDE08 27BD0018 */  addiu      $sp, $sp, 0x18
+/* 5B9DDC 801FDE0C 03E00008 */  jr         $ra
+/* 5B9DE0 801FDE10 00000000 */   nop

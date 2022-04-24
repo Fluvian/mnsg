@@ -2,6 +2,11 @@
 #include "libc/stdarg.h"
 #include "is_debug.h"
 
+extern u8 D_80304000[];
+
+void* gDebugPrintFunction1 = osSyncPrintf;
+void* gDebugPrintFunction2 = rmonPrintf;
+
 void isPrintfInit() {
     if (*gKMCDbgPrnAdrs != 'KMC\0') {
         osPiWriteIo((u32) &gISVDbgPrnAdrs->put, 0);
