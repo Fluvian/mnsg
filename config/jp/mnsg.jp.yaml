@@ -262,7 +262,7 @@ segments:
     
     # main .data section
     - [0x00055750, .data, boot/main]
-    - [0x00055780, data, boot/is_debug]
+    - [0x00055780, .data, boot/is_debug]
     - [0x00055790, data, boot/memory]
     - [0x000596E0, .data, boot/loop]
     - [0x000597D0, data, boot/math]
