@@ -97,8 +97,8 @@ segments:
     - [0x00037F20, c, boot/boot_37F20]
     - [0x00038240, c, boot/rumble]
     - [0x00038620, c, boot/boot_38620]
-    - [0x00038630, c, boot/boot_38630]
-    - [0x0003BC80, c, boot/boot_3BC80]
+    - [0x00038630, c, boot/audio/state] # Audio Handling Code
+    - [0x0003BC80, c, boot/audio/seq] # Audio Sequence Reader
     - [0x0003D810, c, boot/dialog_state] # Dialog Box Handling Code
 
     # libultra
