@@ -26,7 +26,7 @@ def get_c_file(directory):
 def import_c_file(in_file):
     in_file = os.path.relpath(in_file, root_dir)
     cpp_command = ["gcc", "-E", "-P",
-        "-Iinclude", "-Iinclude", "-Iinclude/PR", "-Isrc", "-D_LANGUAGE_C", "-DF3DEX_GBI", "-D_FINALROM", "-D__sgi", "-DNDEBUG", in_file]
+                   "-Iinclude", "-Iinclude", "-Iinclude/PR", "-Isrc", "-D_LANGUAGE_C", "-DF3DEX_GBI", "-D_FINALROM", "-D__sgi", "-DNDEBUG", in_file]
     try:
         return subprocess.check_output(cpp_command, cwd=root_dir, encoding="utf-8")
     except subprocess.CalledProcessError:
@@ -34,7 +34,7 @@ def import_c_file(in_file):
             "Failed to preprocess input file, when running command:\n"
             + cpp_command,
             file=sys.stderr,
-            )
+        )
         sys.exit(1)
 
 
@@ -42,15 +42,16 @@ def main():
     if len(sys.argv) > 1:
         arg = sys.argv[1]
         if arg == "-h" or arg == "--help":
-            sys.exit("Usage: ./ctx.py path/to/file.c\n" \
-            "or ./ctx.py (from an actor or gamestate's asm dir)\n" \
-            "Output will be saved in ./ctx.c")
+            sys.exit("Usage: ./ctx.py path/to/file.c\n"
+                     "or ./ctx.py (from an actor or gamestate's asm dir)\n"
+                     "Output will be saved in ./ctx.c")
         c_file_path = Path.cwd() / sys.argv[1]
     else:
         this_dir = Path.cwd()
         c_dir_path = get_c_dir(this_dir.name)
         if c_dir_path is None:
-            sys.exit("Cannot find appropriate c file dir. In argumentless mode, run this script from the c file's corresponding asm dir.")
+            sys.exit(
+                "Cannot find appropriate c file dir. In argumentless mode, run this script from the c file's corresponding asm dir.")
         c_file = get_c_file(c_dir_path)
         c_file_path = os.path.join(c_dir_path, c_file)
 
@@ -60,7 +61,6 @@ def main():
 
     for line in processed_lines:
         if "__attribute__" not in line:
-            # yuck
             line = line.replace("sizeof(long)", "4")
             output.append(line)
 

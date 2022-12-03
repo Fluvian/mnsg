@@ -83,7 +83,7 @@ setup: baserom.$(VERSION).z64
 	python3 tools/splat/split.py $(CONFIG_DIR)/$(BASENAME).$(VERSION).yaml
 
 baserom.$(VERSION).z64:
-	python3 tools/uncompress.py baserom.original.$(VERSION).z64 baserom.$(VERSION).z64
+	python3 tools/decompress.py baserom.original.$(VERSION).z64 baserom.$(VERSION).z64
 	tools/n64crc baserom.$(VERSION).z64
 
 ##### Recipes #####

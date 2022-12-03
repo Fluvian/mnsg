@@ -1,10 +1,10 @@
-# Python script for uncompressing the baserom file.
+# Python script for decompressing the baserom file.
 import sys
 
 # Address of the first file in the overlay table.
 firstFileAddr = None
 
-# Sizes of all the uncompressed files combined.
+# Sizes of all the decompressed files combined.
 rawSize = None
 
 # List of files to skip.
@@ -19,10 +19,11 @@ fileSizes = []
 # List of the new addresses for the files.
 newFileAddrs = []
 
-# List of all the uncompressed file sizes.
+# List of all the decompressed file sizes.
 newFileSizes = []
 
 ##### Search #####
+
 
 def preprocess_find_match(signature):
     prefixPosition = 0
@@ -44,6 +45,7 @@ def preprocess_find_match(signature):
 
     return partial_match_array
 
+
 def find_match(input, signature):
     filePosition = 0
     signaturePosition = 0
@@ -57,7 +59,7 @@ def find_match(input, signature):
             if signaturePosition == len(signature):
                 # Return position at end of signature.
                 return filePosition
-            
+
         elif signaturePosition > 0:
             signaturePosition = partial_match_array[signaturePosition - 1]
 
@@ -69,30 +71,31 @@ def find_match(input, signature):
 
 ##### Decompression #####
 
+
 def decompress(input, sizeCompressed):
-    buffer = bytearray(0xFFFFFF) # Max file size for a compressed LZKN64 file.
+    buffer = bytearray(0xFFFFFF)  # Max file size for a compressed LZKN64 file.
 
     inPos = 4  # Offset in input file.
-    bufPos = 0 # Offset in output file.
+    bufPos = 0  # Offset in output file.
 
     while inPos < sizeCompressed:
         curCmd = input[inPos]
         inPos += 1
 
-        if curCmd < 0x80: # Sliding window lookback and copy with length.
+        if curCmd < 0x80:  # Sliding window lookback and copy with length.
             lookBackLength = input[inPos] + (curCmd << 8) & 0x3FF
             for _ in range(2 + (curCmd >> 2)):
                 buffer[bufPos] = buffer[bufPos - lookBackLength]
                 bufPos += 1
             inPos += 1
 
-        elif curCmd < 0xA0: # Raw data copy with length.
+        elif curCmd < 0xA0:  # Raw data copy with length.
             for _ in range(curCmd & 0x1F):
                 buffer[bufPos] = input[inPos]
                 bufPos += 1
                 inPos += 1
 
-        elif curCmd <= 0xFF: # Write specific byte for length.
+        elif curCmd <= 0xFF:  # Write specific byte for length.
             value = 0
             length = 2 + (curCmd & 0x1F)
 
@@ -113,25 +116,27 @@ def decompress(input, sizeCompressed):
     return buffer[:bufPos]
 
 # Decompression code modified to just increment the position counters.
+
+
 def decompress_get_len(input, sizeCompressed):
     inPos = 4  # Offset in input file.
-    bufPos = 0 # Offset in output file.
+    bufPos = 0  # Offset in output file.
 
     while inPos < sizeCompressed:
         curCmd = input[inPos]
         inPos += 1
 
-        if curCmd < 0x80: # Sliding window lookback and copy with length.
+        if curCmd < 0x80:  # Sliding window lookback and copy with length.
             for _ in range(2 + (curCmd >> 2)):
                 bufPos += 1
             inPos += 1
 
-        elif curCmd < 0xA0: # Raw data copy with length.
+        elif curCmd < 0xA0:  # Raw data copy with length.
             for _ in range(curCmd & 0x1F):
                 bufPos += 1
                 inPos += 1
 
-        elif curCmd <= 0xFF: # Write specific byte for length.
+        elif curCmd <= 0xFF:  # Write specific byte for length.
             length = 2 + (curCmd & 0x1F)
 
             if curCmd == 0xFF:
@@ -150,20 +155,24 @@ def decompress_get_len(input, sizeCompressed):
 
 ##### Modify Overlay Table #####
 
+
 def copy_buffer(input, output):
     output[0:len(input)] = input
 
     return output
+
 
 def copy_buffer_from_pos_with_len(input, output, pos, len):
     output[0:len] = input[pos:pos + len]
 
     return output
 
+
 def copy_buffer_to_pos_with_len(input, output, pos, len):
     output[pos:pos + len] = input[0:len]
 
     return output
+
 
 def zero_out_buffer_from_pos_with_len(output, pos, len):
     for i in range(len):
@@ -171,16 +180,19 @@ def zero_out_buffer_from_pos_with_len(output, pos, len):
 
     return output
 
+
 def get_compressed_file_addresses_and_sizes(input, tableAddr):
     pos = 0
-    fileAddr = int.from_bytes(input[tableAddr + pos + 1:tableAddr + pos + 4], byteorder = 'big')
-    nextFileAddr = int.from_bytes(input[tableAddr + pos + 5:tableAddr + pos + 8], byteorder = 'big')
+    fileAddr = int.from_bytes(
+        input[tableAddr + pos + 1:tableAddr + pos + 4], byteorder='big')
+    nextFileAddr = int.from_bytes(
+        input[tableAddr + pos + 5:tableAddr + pos + 8], byteorder='big')
 
-    global firstFileAddr 
+    global firstFileAddr
     firstFileAddr = fileAddr
 
     while fileAddr != 0:
-        # Highest bit of address is not set, file is already uncompressed.
+        # Highest bit of address is not set, file is already decompressed.
         if input[tableAddr + pos] == 0:
             skipFiles.append(1)
 
@@ -196,24 +208,32 @@ def get_compressed_file_addresses_and_sizes(input, tableAddr):
             fileAddrs.append(fileAddr)
 
             # Headers of compressed files have their compressed sizes within them.
-            fileSizes.append(int.from_bytes(input[fileAddr + 1:fileAddr + 4], byteorder = 'big'))
-        
+            fileSizes.append(int.from_bytes(
+                input[fileAddr + 1:fileAddr + 4], byteorder='big'))
+
         pos += 4
 
-        fileAddr = int.from_bytes(input[tableAddr + pos + 1:tableAddr + pos + 4], byteorder = 'big')
-        nextFileAddr = int.from_bytes(input[tableAddr + pos + 5:tableAddr + pos + 8], byteorder = 'big')
+        fileAddr = int.from_bytes(
+            input[tableAddr + pos + 1:tableAddr + pos + 4], byteorder='big')
+        nextFileAddr = int.from_bytes(
+            input[tableAddr + pos + 5:tableAddr + pos + 8], byteorder='big')
+
 
 def get_raw_file_sizes(input):
-    compressedBuf = bytearray(0xFFFFFF) # Max file size for a compressed LZKN64 file.
+    # Max file size for a compressed LZKN64 file.
+    compressedBuf = bytearray(0xFFFFFF)
 
     for i in range(len(fileSizes)):
-        copy_buffer_from_pos_with_len(input, compressedBuf, fileAddrs[i], fileSizes[i])
+        copy_buffer_from_pos_with_len(
+            input, compressedBuf, fileAddrs[i], fileSizes[i])
 
         if skipFiles[i] != 1:
             # "Fake decompress" to get the length of the raw data.
-            newFileSizes.append(decompress_get_len(compressedBuf, fileSizes[i]))
+            newFileSizes.append(decompress_get_len(
+                compressedBuf, fileSizes[i]))
         else:
             newFileSizes.append(fileSizes[i])
+
 
 def get_raw_file_addresses():
     pos = firstFileAddr
@@ -222,24 +242,31 @@ def get_raw_file_addresses():
         newFileAddrs.append(pos)
         pos += newFileSizes[i]
 
-    global rawSize 
+    global rawSize
     rawSize = pos - firstFileAddr
 
+
 def write_raw_files(input, buffer, tableAddr):
-    fileBuf = bytearray(0xFFFFFF) # Max file size for a compressed LZKN64 file.
+    # Max file size for a compressed LZKN64 file.
+    fileBuf = bytearray(0xFFFFFF)
 
     for i in range(len(fileAddrs)):
-        copy_buffer_from_pos_with_len(input, fileBuf, fileAddrs[i], fileSizes[i])
+        copy_buffer_from_pos_with_len(
+            input, fileBuf, fileAddrs[i], fileSizes[i])
 
         if skipFiles[i] != 1:
             fileBuf = decompress(fileBuf, fileSizes[i])
 
-        copy_buffer_to_pos_with_len(fileBuf, buffer, newFileAddrs[i], newFileSizes[i])
+        copy_buffer_to_pos_with_len(
+            fileBuf, buffer, newFileAddrs[i], newFileSizes[i])
 
         # Write the new locations to the overlay table.
-        buffer[tableAddr + (i * 4):tableAddr + (i * 4) + 4] = newFileAddrs[i].to_bytes(4, 'big')
+        buffer[tableAddr + (i * 4):tableAddr + (i * 4) +
+               4] = newFileAddrs[i].to_bytes(4, 'big')
 
 # Find the nearest power of two for the final ROM size. (https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2)
+
+
 def get_new_file_size(size):
     size -= 1
     size |= size >> 1
@@ -251,17 +278,18 @@ def get_new_file_size(size):
 
     return size
 
-def uncompress(input, tableAddr):
-    buffer = bytearray(0x4000000) # 512Mbit (64Mbyte) is the maximum ROM size.
+
+def decompress(input, tableAddr):
+    buffer = bytearray(0x4000000)  # 512Mbit (64Mbyte) is the maximum ROM size.
     buffer = copy_buffer(input, buffer)
 
     # List all of the file addresses and sizes in a table.
     get_compressed_file_addresses_and_sizes(input, tableAddr)
 
-    # Get the uncompressed file sizes.
+    # Get the decompressed file sizes.
     get_raw_file_sizes(input)
 
-    # Get the uncompressed file addresses.
+    # Get the decompressed file addresses.
     get_raw_file_addresses()
 
     buffer = zero_out_buffer_from_pos_with_len(buffer, firstFileAddr, rawSize)
@@ -270,24 +298,27 @@ def uncompress(input, tableAddr):
 
     return buffer[:get_new_file_size(rawSize + firstFileAddr)]
 
+
 def main():
     input = open(sys.argv[1], "rb")
     output = open(sys.argv[2], "wb")
     inputBuf = input.read()
 
-    tableAddr = find_match(inputBuf, b'\x4E\x69\x73\x69\x74\x65\x6E\x6D\x61\x2D\x49\x63\x68\x69\x67\x6F')
+    tableAddr = find_match(
+        inputBuf, b'\x4E\x69\x73\x69\x74\x65\x6E\x6D\x61\x2D\x49\x63\x68\x69\x67\x6F')
 
-    output.write(uncompress(inputBuf, tableAddr))
+    output.write(decompress(inputBuf, tableAddr))
 
     input.close()
     output.close()
 
+
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print("LZKN64 Uncompression Script")
+        print("LZKN64 decompression Script")
         print("")
-        print("uncompress.py input_file output_file")
+        print("decompress.py input_file output_file")
         print("    input_file: Path to the ROM file for an LZKN64 compressed game.")
-        print("    output_file: Path to the resulting uncompressed ROM file.")
+        print("    output_file: Path to the resulting decompressed ROM file.")
     else:
         main()
