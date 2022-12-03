@@ -1,6 +1,7 @@
 # Directories
 .vscode/
-assets/*
+assets/
+asm/
 build/
 expected/
 __pycache__/

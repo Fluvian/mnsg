@@ -52,7 +52,8 @@ GLOBAL_ASM_O_FILES := $(foreach file,$(GLOBAL_ASM_C_FILES),$(BUILD_DIR)/$(file).
 TARGET := $(BUILD_DIR)/$(BASENAME).$(VERSION)
 LD_SCRIPT := $(BASENAME).$(VERSION).ld
 
-$(BUILD_DIR)/src/boot/is_debug.c.o: OPTFLAGS := -O2 -g3 
+$(BUILD_DIR)/src/boot/is_debug.c.o: OPTFLAGS := -O2 -g3
+$(BUILD_DIR)/src/boot/audio/seq.c.o: OPTFLAGS := -O2 -g3 
 
 ##### Targets #####
 default: all

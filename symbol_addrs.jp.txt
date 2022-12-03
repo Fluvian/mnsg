@@ -68,3 +68,7 @@ gUnk80072AA0 = 0x80072AA0; // type:data
 gUnk80072AA4 = 0x80072AA4; // type:data
 gLevelSelectLoopFuncs = 0x80072AA8; // type:data
 gLevelSelectPlayerStrings = 0x80072AC0; // type:data
+
+// state.c
+gAudioState = 0x80178E00; // type:data
+gAudioSeqPtr = 0x80178E04; // type:data
