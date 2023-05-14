@@ -1,7 +1,4 @@
-basename: mnsg
-
 options:
-  create_detected_syms: True
   find_file_boundaries: True
 
   platform: n64
@@ -9,6 +6,7 @@ options:
 
   header_encoding: word
   
+  basename: mnsg
   base_path: ./../../
   build_path: build/jp
   src_path: src
@@ -19,9 +17,7 @@ options:
   cache_path: .splat_cache.jp
 
   ld_script_path: mnsg.jp.ld
-  linker_symbol_header_path: build/jp/include/ld_addrs.h
   symbol_addrs_path: symbol_addrs.jp.txt
-  undefined_syms_path: undefined_syms.jp.txt
   undefined_syms_auto_path: undefined_syms_auto.txt
   undefined_funcs_auto_path: undefined_funcs_auto.txt
 
